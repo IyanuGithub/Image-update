@@ -1,0 +1,15 @@
+const cloudinary = require('cloudinary').v2
+const fs = require('fs')
+
+const uploadImage = async (req, res) => {
+    //console.log(req.files);
+    const result = await cloudinary.uploader.upload(req.files.image.tempFilePath,{
+        use_filename: true,
+        folder: 'ProductImages',
+    }) 
+    console.log(result)
+    fs.unlinkSync(req.files.image.tempFilePath)
+    return res.status(200).json({ image: { src: result.secure_url }})
+}
+
+module.exports = uploadImage
